@@ -27,13 +27,15 @@ public class SAVIWorld_model extends PApplet {
 	double MAX_SPEED;
 	int PERCEPTION_DISTANCE;
 	int WIFI_PERCEPTION_DISTANCE;
-	int NUMBER_UAS;
+	int NUMBER_UAV;
+	int NUMBER_UGV;
 	int RANDOM_SEED;
 	double REASONING_CYCLE_PERIOD;
 	int TREE_SIZE;
 	int HOUSE_SIZE;
 	int THREAT_SIZE;
-	int UAS_SIZE;
+	int UAV_SIZE;
+	int UGV_SIZE;
 	/********** CONSTANTS THAT CANNOT BE LOADED FROM THE CONF FILE **********/
 	int X_PIXELS = 900;
 	int Y_PIXELS = 700;
@@ -99,13 +101,15 @@ public void setup() {
 	MAX_SPEED = (double) Double.parseDouble(modelProps.getProperty("MAX_SPEED"));
 	PERCEPTION_DISTANCE = Integer.parseInt(modelProps.getProperty("PERCEPTION_DISTANCE"));
 	WIFI_PERCEPTION_DISTANCE = Integer.parseInt(modelProps.getProperty("WIFI_PERCEPTION_DISTANCE"));
-	NUMBER_UAS = Integer.parseInt(modelProps.getProperty("NUMBER_UAS"));
+	NUMBER_UGV = Integer.parseInt(modelProps.getProperty("NUMBER_UGV"));
+	NUMBER_UAV = Integer.parseInt(modelProps.getProperty("NUMBER_UAV"));
 	RANDOM_SEED = Integer.parseInt(modelProps.getProperty("RANDOM_SEED"));
 	REASONING_CYCLE_PERIOD = (double) Double.parseDouble(modelProps.getProperty("REASONING_CYCLE_PERIOD"));
 	TREE_SIZE = Integer.parseInt(modelProps.getProperty("TREE_SIZE"));
 	HOUSE_SIZE = Integer.parseInt(modelProps.getProperty("HOUSE_SIZE"));
 	THREAT_SIZE = Integer.parseInt(modelProps.getProperty("THREAT_SIZE"));
-	UAS_SIZE = Integer.parseInt(modelProps.getProperty("UAS_SIZE"));
+	UGV_SIZE = Integer.parseInt(modelProps.getProperty("UGV_SIZE"));
+	UAV_SIZE = Integer.parseInt(modelProps.getProperty("UAV_SIZE"));
 	
 	// Initialization code goes here
 	simTime = 0;      // seconds
@@ -132,13 +136,21 @@ public void setup() {
 	
 	Random rand = new Random();
 	
-	for(int i = 0; i < NUMBER_UAS; i++)  { //Put UAS
+	for(int i = 0; i < NUMBER_UAV+NUMBER_UGV; i++)  { //Put UAS
 		//_PIXELS is the maximum and the 1 is our minimum
 		//TODO: right now agents are initialized with strings "0", "1", "2", ... as identifiers and a fixed type "demo" which matches their asl file name. This should be configurable...
 		if(RANDOM_SEED != -1) {
 			rand = new Random(RANDOM_SEED+i);
+		}	
+	
+		if(i < NUMBER_UGV)  { //Put UaV
+			//_PIXELS is the maximum and the 1 is our minimum
+			//TODO: right now agents are initialized with strings "0", "1", "2", ... as identifiers and a fixed type "demo" which matches their asl file name. This should be configurable...
+			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+		}else {
+			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
 		}
-		objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UAS_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+		
 	}
 	
 	for(int i = 0; i < NUMBER_TREES; i++) { //Put trees
@@ -164,7 +176,7 @@ public void setup() {
 
 	}          
 
-  // smoother rendering (optional)
+	// smoother rendering (optional)
 	frameRate(FRAME_RATE); // max 60 draw() calls per real second. (Can make it a larger value for the simulation to go faster)
 	// simTimeDelta is now 1000/FRAME_RATE, meaning the simulation is in real-time if the processor can manage it.
 
@@ -174,9 +186,9 @@ public void setup() {
 	Map<String,AgentModel> agentList = new HashMap<String,AgentModel>();
 	
 	for(WorldObject wo: objects) {//Create UAS agents
-		if(wo instanceof UaV) {
-			agentList.put(((UaV)wo).getBehavior().getID(), ((UaV)wo).getBehavior());
-		}
+		if(wo instanceof UxV) {
+			agentList.put(((UxV)wo).getBehavior().getID(), ((UxV)wo).getBehavior());
+		}	
 	}
 	
 	jasonAgents = new JasonMAS(agentList);
