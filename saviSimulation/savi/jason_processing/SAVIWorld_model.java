@@ -138,7 +138,7 @@ public void setup() {
 		if(RANDOM_SEED != -1) {
 			rand = new Random(RANDOM_SEED+i);
 		}
-		objects.add(new UAS(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UAS_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+		objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UAS_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
 	}
 	
 	for(int i = 0; i < NUMBER_TREES; i++) { //Put trees
@@ -174,8 +174,8 @@ public void setup() {
 	Map<String,AgentModel> agentList = new HashMap<String,AgentModel>();
 	
 	for(WorldObject wo: objects) {//Create UAS agents
-		if(wo instanceof UAS) {
-			agentList.put(((UAS)wo).getBehavior().getID(), ((UAS)wo).getBehavior());
+		if(wo instanceof UaV) {
+			agentList.put(((UaV)wo).getBehavior().getID(), ((UaV)wo).getBehavior());
 		}
 	}
 	
@@ -286,15 +286,15 @@ public void pauseSimulation(){
 		
 		System.out.println("pausing simulation!-------===================================================");
 		for(WorldObject wo: objects){ //unpause all agents
-			if(wo instanceof UAS) {
-				((UAS)wo).getBehavior().pauseAgent();
+			if(wo instanceof UaV) {
+				((UaV)wo).getBehavior().pauseAgent();
 			}	
 		}
 	} else { //the sim was paused, unpause it
 		System.out.println("resuming simulation!-------");
 		for(WorldObject wo: objects){ //pause all agents
-			if(wo instanceof UAS)
-				((UAS)wo).getBehavior().unPauseAgent();			
+			if(wo instanceof UaV)
+				((UaV)wo).getBehavior().unPauseAgent();			
 		}	
 	}
 	simPaused = !simPaused;

@@ -10,7 +10,7 @@ import processing.opengl.*;
 import savi.StateSynchronization.*;
 
 
-public class UASBehavior extends AgentModel {
+public class UxVBehavior extends AgentModel {
 	private static final double SPEED = 0.1; // 0.1 pixels (whatever real-life distance this corresponds to)
 
 	//-----------------------------------------
@@ -19,13 +19,13 @@ public class UASBehavior extends AgentModel {
 	//String ID; -- Note: moved to superclass 
 	//String type; -- same
 	//SyncAgentState agentState; --same
-	private PVector initialPosition;
-	private PVector position;
-	private double speedVal;
-	private double compasAngle;
-	private ArrayList<CameraPerception> visibleItems;
-	private double time;	
-	private double wifiProbWorking;
+	protected PVector initialPosition;
+	protected PVector position;
+	protected double speedVal;
+	protected double compasAngle;
+	protected ArrayList<CameraPerception> visibleItems;
+	protected double time;	
+	protected double wifiProbWorking;
 	
 	//***********************************************************//
 	//I THINK IS BETTER TO HAVE THE ROBOTS ITS DATA AND THE SYNCAGENTSTATE ITS OWN.
@@ -42,7 +42,7 @@ public class UASBehavior extends AgentModel {
 	 * @param type
 	 * @param initialPosition
 	 */
-	public UASBehavior(String id, String type, PVector initialPosition, double reasoningCyclePeriod) {	
+	public UxVBehavior(String id, String type, PVector initialPosition, double reasoningCyclePeriod) {	
 		// Initialize data values
 		super(reasoningCyclePeriod);
 		this.ID = id;
@@ -109,7 +109,7 @@ public class UASBehavior extends AgentModel {
 		ArrayList<CameraPerception> visibleItems = new ArrayList<CameraPerception>();
 		for(WorldObject wo:obj) {
 			//shouldn't detect itself. if not (uAS and himself)
-			if( !((wo instanceof UAS) && this.ID.equals(((UAS)wo).getBehavior().getID())) ){
+			if( !((wo instanceof UaV) && this.ID.equals(((UaV)wo).getBehavior().getID())) ){
 				
             	List<Double> polar = Geometry.relativePositionPolar(wo.getPosition(), this.position, this.compasAngle);
             
@@ -134,18 +134,18 @@ public class UASBehavior extends AgentModel {
 				Queue<String> myMsgOutCopy = new LinkedList<String>();
 				myMsgOutCopy = this.agentState.getMsgOutAll();
 				for(WorldObject wo:objects) {
-					if(wo instanceof UAS){
+					if(wo instanceof UaV){
 						//get relative position of UAS to UAS:
-						float deltax = ((UAS)wo).getBehavior().getPosition().x - this.getPosition().x;
-						float deltay = ((UAS)wo).getBehavior().getPosition().y - this.getPosition().y;
+						float deltax = ((UaV)wo).getBehavior().getPosition().x - this.getPosition().x;
+						float deltay = ((UaV)wo).getBehavior().getPosition().y - this.getPosition().y;
 						//calculate distance
 						double dist  = Math.sqrt(deltax*deltax + deltay*deltay);
 						if(dist < WIFI_PERCEPTION_DISTANCE & wifiProbWorking > 0) {
 							Queue<String> msg = new LinkedList<String>();
 							msg = myMsgOutCopy;
-							if(this.ID != ((UAS)wo).getBehavior().ID & ((UAS)wo).getBehavior().wifiProbWorking > 0 ) {
+							if(this.ID != ((UaV)wo).getBehavior().ID & ((UaV)wo).getBehavior().wifiProbWorking > 0 ) {
 								while(!msg.isEmpty()) {
-									((UAS)wo).getBehavior().agentState.setMsgIn(msg.poll());			
+									((UaV)wo).getBehavior().agentState.setMsgIn(msg.poll());			
 								}
 							}				
 						}		
