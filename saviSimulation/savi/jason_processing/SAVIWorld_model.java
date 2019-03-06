@@ -39,6 +39,7 @@ public class SAVIWorld_model extends PApplet {
 	/********** CONSTANTS THAT CANNOT BE LOADED FROM THE CONF FILE **********/
 	int X_PIXELS = 900;
 	int Y_PIXELS = 700;
+	int Z_PIXELS = 500;
 	
 	// TimeStamp file names
 	long lastCycleTimeStamp;
@@ -146,9 +147,9 @@ public void setup() {
 		if(i < NUMBER_UGV)  { //Put UaV
 			//_PIXELS is the maximum and the 1 is our minimum
 			//TODO: right now agents are initialized with strings "0", "1", "2", ... as identifiers and a fixed type "demo" which matches their asl file name. This should be configurable...
-			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UGV_SIZE/2), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
 		}else {
-			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UAV_SIZE/2), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
 		}
 		
 	}
@@ -158,21 +159,21 @@ public void setup() {
 		if(RANDOM_SEED != -1) {
 			rand = new Random(2*RANDOM_SEED+i);
 		}
-		objects.add(new WorldObject(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), TREE_SIZE, "tree", this, treeImage));
+		objects.add(new WorldObject(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, TREE_SIZE/2), TREE_SIZE, "tree", this, treeImage));
 	}
 	for(int i = 0; i < NUMBER_HOUSES; i++) { //Put houses
 		//_PIXELS is the maximum and the 1 is our minimum.
 		if(RANDOM_SEED != -1) {
 			rand = new Random(3*RANDOM_SEED+i);
 		}
-		objects.add(new WorldObject(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1), HOUSE_SIZE, "house", this, houseImage));
+		objects.add(new WorldObject(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, HOUSE_SIZE/2), HOUSE_SIZE, "house", this, houseImage));
 	}
 	for(int i = 0; i < NUMBER_THREATS; i++) { //Put threats
 		//_PIXELS is the maximum and the 1 is our minimum.
 		if(RANDOM_SEED != -1) {
 			rand = new Random(4*RANDOM_SEED+i);
 		}
-		objects.add(new Threat(i, rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, RANDOM_SEED, MAX_SPEED, THREAT_SIZE, "threat", this, threatImage));
+		objects.add(new Threat(i, rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, THREAT_SIZE/2, RANDOM_SEED, MAX_SPEED, THREAT_SIZE, "threat", this, threatImage));
 
 	}          
 
