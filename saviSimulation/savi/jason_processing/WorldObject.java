@@ -38,8 +38,7 @@ public class WorldObject{
 			simulator.stroke(0);
 
 			simulator.shapeMode(PConstants.CENTER);
-			simulator.shape(this.image, this.position.x, this.position.y,pixels,pixels);
-
+			simulator.shape(this.image, this.position.x, this.position.y, this.pixels, this.pixels);
 		}
 		
 		public void update(double simtime, double timestep, int perceptionDistance, int WIFI_PERCEPTION_DISTANCE,  List<WorldObject> objects) {

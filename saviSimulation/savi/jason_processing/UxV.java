@@ -32,11 +32,11 @@ public class UxV extends WorldObject {
 	 * @param type
 	 * @param initialPosition
 	 */
-	public UxV(int id, PVector pos, int pixels, String Type, SAVIWorld_model sim, PShape image, double reasoningCyclePeriod) {			
+	public UxV(int id, PVector pos, int pixels, String Type, SAVIWorld_model sim, PShape image, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev) {			
 		// Initializes UAS as WorldObject
 		super(id, pos, pixels, Type, sim, image);
 		// Initializes Behaviuor
-		this.uxvBehavior = new UxVBehavior(Integer.toString(id), type, pos, reasoningCyclePeriod);
+		this.uxvBehavior = new UxVBehavior(Integer.toString(id), type, pos, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev);
 	}
 	
 	@Override
@@ -83,9 +83,8 @@ public class UxV extends WorldObject {
 			double cosv = Math.cos(angle);
 			double sinv = Math.sin(angle);
 			p1 = new PVector(Math.round(cosv*cpi.getParameters().get(2))+this.getBehavior().getPosition().x, Math.round(sinv*cpi.getParameters().get(2))+this.getBehavior().getPosition().y); 
-			// draw circle over items visualized
-//			simulator.ellipse(p1.x,p1.y, cpi.getParameters().get(3).floatValue(), cpi.getParameters().get(3).floatValue());
-			simulator.ellipse(p1.x,p1.y, 20, 20);
+			// draw circle over items visualized, centered on p1 and with (radius*2, radius*2) dimension
+			simulator.ellipse(p1.x,p1.y, cpi.getParameters().get(3).floatValue()*2, cpi.getParameters().get(3).floatValue()*2);
 		}
 		
 		

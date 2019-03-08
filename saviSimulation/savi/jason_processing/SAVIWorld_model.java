@@ -36,6 +36,8 @@ public class SAVIWorld_model extends PApplet {
 	int THREAT_SIZE;
 	int UAV_SIZE;
 	int UGV_SIZE;
+	double SENSORS_ERROR_PROB;
+	double SENSORS_ERROR_STD_DEV;
 	/********** CONSTANTS THAT CANNOT BE LOADED FROM THE CONF FILE **********/
 	int X_PIXELS = 900;
 	int Y_PIXELS = 700;
@@ -111,7 +113,8 @@ public void setup() {
 	THREAT_SIZE = Integer.parseInt(modelProps.getProperty("THREAT_SIZE"));
 	UGV_SIZE = Integer.parseInt(modelProps.getProperty("UGV_SIZE"));
 	UAV_SIZE = Integer.parseInt(modelProps.getProperty("UAV_SIZE"));
-	
+	SENSORS_ERROR_PROB = (double) Double.parseDouble(modelProps.getProperty("SENSORS_ERROR_PROB"));
+	SENSORS_ERROR_STD_DEV = (double) Double.parseDouble(modelProps.getProperty("SENSORS_ERROR_STD_DEV"));
 	// Initialization code goes here
 	simTime = 0;      // seconds
 	simTimeDelta = 1000/FRAME_RATE; // milliseconds
@@ -147,9 +150,9 @@ public void setup() {
 		if(i < NUMBER_UGV)  { //Put UaV
 			//_PIXELS is the maximum and the 1 is our minimum
 			//TODO: right now agents are initialized with strings "0", "1", "2", ... as identifiers and a fixed type "demo" which matches their asl file name. This should be configurable...
-			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UGV_SIZE/2), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UGV_SIZE/2), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD, SENSORS_ERROR_PROB, SENSORS_ERROR_STD_DEV));
 		}else {
-			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UAV_SIZE/2), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD));
+			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UAV_SIZE/2), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD, SENSORS_ERROR_PROB, SENSORS_ERROR_STD_DEV));
 		}
 		
 	}

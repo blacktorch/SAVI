@@ -26,6 +26,8 @@ public class UxVBehavior extends AgentModel {
 	protected ArrayList<CameraPerception> visibleItems;
 	protected double time;	
 	protected double wifiProbWorking;
+	protected double sensorsErrorProb;
+	protected double sensorsErrorStdDev;
 	
 	//***********************************************************//
 	//I THINK IS BETTER TO HAVE THE ROBOTS ITS DATA AND THE SYNCAGENTSTATE ITS OWN.
@@ -42,7 +44,7 @@ public class UxVBehavior extends AgentModel {
 	 * @param type
 	 * @param initialPosition
 	 */
-	public UxVBehavior(String id, String type, PVector initialPosition, double reasoningCyclePeriod) {	
+	public UxVBehavior(String id, String type, PVector initialPosition, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev) {	
 		// Initialize data values
 		super(reasoningCyclePeriod);
 		this.ID = id;
@@ -57,6 +59,9 @@ public class UxVBehavior extends AgentModel {
 		agentState = new SyncAgentState();
 		this.visibleItems = new ArrayList<CameraPerception>();
 		updatePercepts();
+		
+		this.sensorsErrorProb = sensorsErrorProb;
+		this.sensorsErrorStdDev = sensorsErrorStdDev;
 	}
 
 	public PVector getPosition() {
@@ -67,7 +72,7 @@ public class UxVBehavior extends AgentModel {
 	}
 
 	public double getCompassAngle() {
-		return this.compasAngle;
+		return this.compasAngle;		
 	}
 	/**
 	 * update
@@ -100,6 +105,7 @@ public class UxVBehavior extends AgentModel {
 					//it's visible 
 					detectedItems.add(new CameraPerception(wo.type, this.time, azimuth, elevation, dist, wo.pixels/2));
 					visibleItems.add(new CameraPerception(wo.type, this.time, azimuth, elevation, dist, wo.pixels/2));
+
             	}
 			}	   	
 		}
@@ -174,18 +180,59 @@ public class UxVBehavior extends AgentModel {
 	 */
 	protected void updatePercepts() {
 		PerceptionSnapshot P = new PerceptionSnapshot();		
-		//Add position
-		P.addPerception(new PositionPerception(this.time, (double) this.position.x, (double) this.position.y, (double) this.position.z));
-		//Add velocity
-		P.addPerception(new VelocityPerception(this.time, Math.atan(this.position.x/this.position.y), 0, this.speedVal));
-		//Add time
+		PVector positionWithError = new PVector();
+		double x,y,z;
+		
+		//if position sensor is failing
+		if(isSensorFailing(sensorsErrorProb)) {
+			x = calculateFailureValue(this.position.x, this.sensorsErrorStdDev);
+			y = calculateFailureValue(this.position.y, this.sensorsErrorStdDev);
+			z = calculateFailureValue(this.position.z, this.sensorsErrorStdDev);
+			//add position
+			P.addPerception(new PositionPerception(this.time, (double) x, (double) y, (double) z));
+			//Add velocity
+			P.addPerception(new VelocityPerception(this.time, Math.atan(x/y), 0, this.speedVal));			
+		} else { //Value without error
+			//add position
+			P.addPerception(new PositionPerception(this.time, (double) this.position.x, (double) this.position.y, (double) this.position.z));
+			//Add velocity
+			P.addPerception(new VelocityPerception(this.time, Math.atan(this.position.x/this.position.y), 0, this.speedVal));
+		}
+		
 		P.addPerception(new TimePerception(this.time));
+		
 		//Add Visible items
 		for(CameraPerception cpi : this.visibleItems) {
+			for(int i=0; i<cpi.getParameters().size(); i++) {
+				if(isSensorFailing(sensorsErrorProb)) {
+					cpi.getParameters().set(i, calculateFailureValue(cpi.getParameters().get(i), this.sensorsErrorStdDev));
+				}
+			}	
+			
 			P.addPerception(cpi);
 		}
+		
+		
 		agentState.setPerceptions(P);
 	}
+	
+	// takes probability parameter between 0 and 1 
+	protected boolean isSensorFailing (double probability) {
+		Random rand= new Random(System.currentTimeMillis());
+		if(rand.nextDouble()<probability) {
+			return true;
+		}else {
+			return false;
+		}	
+	}
+	
+	// generate random value for a normal distribution (mean, stdDev)
+	protected double calculateFailureValue (double mean, double stdDev) {
+		Random rand= new Random(System.currentTimeMillis());
+		return ((rand.nextGaussian()*stdDev)+mean);
+	}
+	
+	
 	
 	/**
 	 * Get UAS id
@@ -201,4 +248,10 @@ public class UxVBehavior extends AgentModel {
 	public String getType() {		
 		return type;
 	}
+	
+	
+	
+	
+	
+	
 }
