@@ -1,14 +1,5 @@
 package savi.jason_processing;
-
-import java.util.*;
-
 import processing.core.*;
-
-import processing.data.*;
-import processing.event.*; 
-import processing.opengl.*;
-import savi.StateSynchronization.*;
-
 
 public class UaV extends UxV {
 	private static final double SPEED = 0.1; // 0.1 pixels (whatever real-life distance this corresponds to)
@@ -31,10 +22,10 @@ public class UaV extends UxV {
 	 * @param type
 	 * @param initialPosition
 	 */
-	public UaV(int id, PVector pos, int pixels, String Type, SAVIWorld_model sim, PShape image, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev) {			
+	public UaV(int id, PVector pos, int pixels, String Type, SAVIWorld_model sim, PShape image, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev, double RANDOM_SEED) {			
 		// Initializes UAS as WorldObject
-		super(id, pos, pixels, Type, sim, image, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev);
+		super(id, pos, pixels, Type, sim, image, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev, RANDOM_SEED);
 		// Initializes Behaviuor
-		uxvBehavior = new UaVBehavior(Integer.toString(id), type, pos, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev);
+		uxvBehavior = new UaVBehavior(Integer.toString(id), type, pos, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev, RANDOM_SEED);
 	}
 }

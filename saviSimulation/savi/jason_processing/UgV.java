@@ -31,10 +31,10 @@ public class UgV extends UxV {
 	 * @param type
 	 * @param initialPosition
 	 */
-	public UgV(int id, PVector pos, int pixels, String Type, SAVIWorld_model sim, PShape image, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev) {			
+	public UgV(int id, PVector pos, int pixels, String Type, SAVIWorld_model sim, PShape image, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev, double RANDOM_SEED) {			
 		// Initializes UAS as WorldObject
-		super(id, pos, pixels, Type, sim, image, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev);
+		super(id, pos, pixels, Type, sim, image, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev, RANDOM_SEED);
 		// Initializes Behaviuor
-		this.uxvBehavior = new UgVBehavior(Integer.toString(id), type, pos, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev);
+		this.uxvBehavior = new UgVBehavior(Integer.toString(id), type, pos, reasoningCyclePeriod, sensorsErrorProb, sensorsErrorStdDev, RANDOM_SEED);
 	}
 }

@@ -28,6 +28,7 @@ public class UxVBehavior extends AgentModel {
 	protected double wifiProbWorking;
 	protected double sensorsErrorProb;
 	protected double sensorsErrorStdDev;
+	protected double randomSeed;
 	
 	//***********************************************************//
 	//I THINK IS BETTER TO HAVE THE ROBOTS ITS DATA AND THE SYNCAGENTSTATE ITS OWN.
@@ -44,7 +45,7 @@ public class UxVBehavior extends AgentModel {
 	 * @param type
 	 * @param initialPosition
 	 */
-	public UxVBehavior(String id, String type, PVector initialPosition, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev) {	
+	public UxVBehavior(String id, String type, PVector initialPosition, double reasoningCyclePeriod, double sensorsErrorProb, double sensorsErrorStdDev, double RANDOM_SEED) {	
 		// Initialize data values
 		super(reasoningCyclePeriod);
 		this.ID = id;
@@ -62,6 +63,7 @@ public class UxVBehavior extends AgentModel {
 		
 		this.sensorsErrorProb = sensorsErrorProb;
 		this.sensorsErrorStdDev = sensorsErrorStdDev;
+		this.randomSeed = RANDOM_SEED;
 	}
 
 	public PVector getPosition() {
@@ -163,14 +165,15 @@ public class UxVBehavior extends AgentModel {
 							while(!msg.isEmpty()) {
 								((UaV)wo).getBehavior().agentState.setMsgIn(msg.poll());			
 							}
-						}	
-					}				
-				}		
+						}
+					}
+				}
 			}
 		}
 	}
 	/**
 	 * Process the action in the queue to update the speedVal and compassAngle
+	 * To be declare in children classes
 	 */
 	protected void processAgentActions(){				
 	}	

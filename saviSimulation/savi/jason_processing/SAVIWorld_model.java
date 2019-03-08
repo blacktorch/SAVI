@@ -150,9 +150,9 @@ public void setup() {
 		if(i < NUMBER_UGV)  { //Put UaV
 			//_PIXELS is the maximum and the 1 is our minimum
 			//TODO: right now agents are initialized with strings "0", "1", "2", ... as identifiers and a fixed type "demo" which matches their asl file name. This should be configurable...
-			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UGV_SIZE/2), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD, SENSORS_ERROR_PROB, SENSORS_ERROR_STD_DEV));
+			objects.add(new UgV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UGV_SIZE/2), UGV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD, SENSORS_ERROR_PROB, SENSORS_ERROR_STD_DEV, RANDOM_SEED));
 		}else {
-			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UAV_SIZE/2), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD, SENSORS_ERROR_PROB, SENSORS_ERROR_STD_DEV));
+			objects.add(new UaV(i, new PVector(rand.nextInt(X_PIXELS) + 1, rand.nextInt(Y_PIXELS) + 1, UAV_SIZE/2), UAV_SIZE,"demo", this, uasImage, REASONING_CYCLE_PERIOD, SENSORS_ERROR_PROB, SENSORS_ERROR_STD_DEV, RANDOM_SEED));
 		}
 		
 	}
